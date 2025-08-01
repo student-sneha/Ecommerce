@@ -89,8 +89,8 @@ const Navbar = () => {
 
       {/* Sidebar menu for small screen */}
       <div
-        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${
-          visible ? "w-full" : "w-0"
+        className={`fixed top-0 right-0 h-full bg-white z-[999] overflow-hidden transition-all duration-300 ${
+    visible ? "w-full" : "w-0"
         }`}
       >
         <div className="flex flex-col text-gray-600">
