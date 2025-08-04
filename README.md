@@ -62,7 +62,7 @@ cp backend/.env.example backend/.env
 ##🛠️ Getting Started (Local Setup)
 ### 1. Clone the repository
 git clone https://github.com/student-sneha/Trendylo-Ecommerce
-cd SnehaFancy
+cd Trendylo
 
 ### 2. Install Frontend Dependencies
 cd frontend
