@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Login");
@@ -10,6 +11,9 @@ const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+
+  const location  = useLocation();
+  const from = location.state?.from || "/";
 
   const validateEmail = (email) => {
     const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
@@ -44,7 +48,7 @@ const Login = () => {
           setName("");
           setEmail("");
           setPassword("");
-          navigate("/");
+          navigate(from);
         } else {
           toast.error(response.data.message || "Signup failed");
         }
@@ -61,7 +65,7 @@ const Login = () => {
           toast.success("Login successful!");
           setEmail("");
           setPassword("");
-          navigate("/");
+          navigate(from);
         } else {
           toast.error("Invalid email or password");
         }
@@ -73,10 +77,10 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (token) {
+    if (token && location.pathname === "/login" && !location.state?.from) {
       navigate("/");
     }
-  }, [token]);
+  }, [token,location]);
 
   return (
     <form

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createContext } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import axios from "axios";
 
 export const ShopContext = createContext();
@@ -19,8 +19,17 @@ const ShopContextProvider = (props) => {
   const [token, setToken] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const addToCart = async (itemId, size) => {
+  const addToCart = async (itemId, size, quantity = 1) => {
+   if(!token){
+    toast.info("Please login first to add items to your cart");
+    setTimeout(() => {
+      navigate("/login",{state: {from:location.pathname}})
+    },1500);
+    return;
+   }
+   
     if (!size) {
       toast.error("Select Product size");
       return;
@@ -41,16 +50,19 @@ const ShopContextProvider = (props) => {
     }
     setCartItems(cartData);
 
-    if(token){
+    
       try {
-        await axios.post(backendUrl + "/api/cart/add", {itemId,size} , {headers:{token}});
-
+        await axios.post(
+          backendUrl + "/api/cart/add", 
+          {itemId,size,quantity} , 
+          {headers:{token}}
+        );
+ toast.success("Item added to cart");
       } catch (error) {
         console.log(error);
-        toast.error(error.message);
+ toast.error("Failed to add item. Please try again.");
       }
     }
-  };
 
   const getCartCount = () => {
     let totalCount = 0;

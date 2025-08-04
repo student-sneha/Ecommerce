@@ -3,6 +3,8 @@ import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
 import CardTotal from "../components/CardTotal";
+import { Link } from "react-router-dom";
+
 
 const Cart = () => {
   const { products, currency, cartItems, updateQuanity, navigate } =
@@ -34,12 +36,15 @@ const Cart = () => {
         <Title text1={"YOUR"} text2={"CART"} />
       </div>
 
+ {cartData.length > 0 ? (
       <div className="space-y-6">
         {cartData.map((item, idx) => {
           const productData = products.find(
             (product) => product._id === item._id
           );
 
+          if(!productData) return null;
+         
           return (
             <div
               key={idx}
@@ -95,7 +100,14 @@ const Cart = () => {
             </div>
           );
         })}
-      </div>
+      </div> ): (
+         <div className="text-center text-gray-500 py-10 text-lg">
+  <p className="mb-4">You have no orders yet.</p>
+  <Link to="/collection" className="shop-now-btn">
+    Shop Now
+  </Link>
+</div>
+      )}
 
       {/* Total Section */}
       <div className="flex justify-end my-20">
