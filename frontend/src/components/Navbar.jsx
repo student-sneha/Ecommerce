@@ -5,6 +5,7 @@ import { ShopContext } from "../context/ShopContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
+   const [showDropdown, setShowDropdown] = useState(false);
   const {
     setShowSearch,
     getCartCount,
@@ -54,7 +55,13 @@ const Navbar = () => {
         />
         <div className="group relative">
           <img
-            onClick={() => (token ? null : navigate(`/login`))}
+            onClick={() => {
+               if (!token) {
+                navigate("/login");
+              } else {
+                setShowDropdown((prev) => !prev);
+              }
+            }}
             src={assets.profile_icon}
             alt=""
             className="w-5 cursor-pointer "
@@ -62,11 +69,36 @@ const Navbar = () => {
 
           {/* Dropdown Menu */}
           {token && (
-            <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
+            <div className={`${
+                showDropdown ? "block" : "hidden"
+              } group-hover:block absolute right-0 pt-4 z-50`}
+>
               <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded ">
-                <p onClick={()=> navigate("/orders")} className="cursor-pointer hover:text-black">My Profile</p>
-                <p onClick={()=> navigate("/orders")} className="cursor-pointer hover:text-black"> Orders</p>
-                <p onClick={logout} className="cursor-pointer hover:text-black">
+                 <p
+                  onClick={() => {
+                    setShowDropdown(false);
+                    navigate("/orders");
+                  }}
+                  className="cursor-pointer hover:text-black"
+                >
+                  My Profile
+                </p>
+                <p
+                  onClick={() => {
+                    navigate("/orders");
+                    setShowDropdown(false);
+                  }}
+                  className="cursor-pointer hover:text-black"
+                >
+                  Orders
+                </p>
+                <p
+                  onClick={() => {
+                    logout();
+                    setShowDropdown(false);
+                  }}
+                  className="cursor-pointer hover:text-black"
+                >
                   Logout
                 </p>
               </div>
